@@ -1,0 +1,802 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>OpenVPN</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-interactiveBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="34e4f0bd-9962-4b11-9256-9e503369cf35" class="page sans"><header><h1 class="page-title">OpenVPN</h1><p class="page-description"></p></header><div class="page-body"><h3 id="3cfa3891-0e33-4c51-83da-0a9203dd503e" class=""><mark class="highlight-purple">Server Side</mark></h3><p id="7c5f692c-8ef0-418c-a19b-3eaa2d976fc7" class=""><code>sudo apt install openvpn</code></p><p id="0b5013c0-1931-4925-9106-dd3925b0eadc" class="">To know more about it:</p><p id="9f055ca8-4408-4593-b906-38084cc1aaf8" class=""><code>sudo apt info openvpn</code></p><p id="3e365078-e450-40a1-9364-8fa72f59b01a" class="">Installing OpenVPN is easy but configuring it, is very challenging and that’s why OpenVPN org provide us with scripts and then we can go ahead and our special changes</p><p id="7a0cdc92-8721-4dcb-90d8-16734fb35787" class=""><code>wget </code><code><a href="https://git.io/vpn">https://git.io/vpn</a></code><code> -O </code><code><a href="http://openvpn.sh/">openvpn.sh</a></code></p><p id="f780aabf-a068-41db-a98a-95d2cb33a510" class="">Now let’s start the script:</p><p id="1440a2ec-d12e-4b0a-bd6a-e79fef6b5a02" class=""><code>chmod +x openvpn.sh</code></p><p id="4e9cfab7-06e6-42c8-b7be-4a20442f62b7" class="">You need privileges when installing:</p><p id="32d0cc70-ea06-449b-9685-8456cac1a25f" class=""><code>sudo ./openvpn.sh</code></p><pre id="194e9e2a-aa70-469d-afc7-6548b56b68d7" class="code"><code>Welcome to this OpenVPN road warrior installer!
+
+Which IPv4 address should be used?
+     1) 192.168.1.5
+     2) 172.16.1.100
+     3) 10.1.0.3
+IPv4 address [1]: 1
+
+This server is behind NAT. What is the public IPv4 address or hostname?
+Public IPv4 address / hostname [Your-Public-IP]: 192.168.1.5
+
+Which protocol should OpenVPN use?
+   1) UDP (recommended)
+   2) TCP
+Protocol [1]:
+
+What port should OpenVPN listen to?
+Port [1194]:
+
+Select a DNS server for the clients:
+   1) Current system resolvers
+   2) Google
+   3) 1.1.1.1
+   4) OpenDNS
+   5) Quad9
+   6) AdGuard
+DNS server [1]: 2
+
+Enter a name for the first client:
+Name [client]: touk
+
+OpenVPN installation is ready to begin.
+Press any key to continue...</code></pre><p id="6e491657-6433-4ff5-85b7-21c7703c66a2" class=""><em>If you want to add more users, you have to run the script again</em></p><p id="94465e61-3e04-43ab-89bd-c28d42d6d9fa" class="">The needed port 1194 is going to be added on iptables automatically, if you are running UFW you won’t see the rule there and even if you create one in UFW it won’t take precedence </p><pre id="677eb17a-f88e-4a36-9cb4-bd5eaf5f4b34" class="code"><code>touk@ubuntu-server:~$ sudo iptables-save
+# Generated by iptables-save v1.8.7 on Sun Sep  3 15:12:53 2023
+*filter
+:INPUT ACCEPT [71668:7983516]
+:FORWARD ACCEPT [12272:2751669]
+:OUTPUT ACCEPT [106599:9084589]
+-A INPUT -p udp -m udp --dport 1194 -j ACCEPT
+-A FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
+-A FORWARD -s 10.8.0.0/24 -j ACCEPT
+COMMIT
+# Completed on Sun Sep  3 15:12:53 2023
+# Generated by iptables-save v1.8.7 on Sun Sep  3 15:12:53 2023
+*nat
+:PREROUTING ACCEPT [2110:172636]
+:INPUT ACCEPT [469:63316]
+:OUTPUT ACCEPT [322:28589]
+:POSTROUTING ACCEPT [232:22084]
+-A POSTROUTING -o ens33 -j MASQUERADE
+-A POSTROUTING -s 10.8.0.0/24 ! -d 10.8.0.0/24 -j SNAT --to-source 192.168.1.5
+COMMIT</code></pre><p id="c615c67d-2587-4d05-b57d-15709a4175bd" class="">If you want to check for it’s status, </p><p id="9be5ada9-b5fc-4bd1-87f3-a8605bb6d4e4" class="">since OpenVPN package comes with the server and client package we will have to specify the service name like this:</p><p id="477e9a2b-54ed-4684-a905-ad8a01a49c2d" class=""><code>sudo systelctl status openvpn-server@server</code></p><pre id="cf407189-c994-493b-8c3b-1dc7fc9d20db" class="code"><code>touk@ubuntu-server:~$ sudo systemctl status openvpn-server@server
+● openvpn-server@server.service - OpenVPN service for server
+     Loaded: loaded (/lib/systemd/system/openvpn-server@.service; enabled; vendor preset: enabled)
+     Active: active (running) since Sun 2023-09-03 15:09:50 UTC; 5min ago
+       Docs: man:openvpn(8)
+             https://community.openvpn.net/openvpn/wiki/Openvpn24ManPage
+             https://community.openvpn.net/openvpn/wiki/HOWTO
+   Main PID: 68439 (openvpn)
+     Status: &quot;Initialization Sequence Completed&quot;
+      Tasks: 1 (limit: 4516)
+     Memory: 1.8M
+        CPU: 21ms
+     CGroup: /system.slice/system-openvpn\x2dserver.slice/openvpn-server@server.service
+             └─68439 /usr/sbin/openvpn --status /run/openvpn-server/status-server.log --status-version 2 --suppress-timestamps --config serve&gt;
+
+Sep 03 15:09:50 ubuntu-server openvpn[68439]: Could not determine IPv4/IPv6 protocol. Using AF_INET
+Sep 03 15:09:50 ubuntu-server openvpn[68439]: Socket Buffers: R=[212992-&gt;212992] S=[212992-&gt;212992]
+Sep 03 15:09:50 ubuntu-server openvpn[68439]: UDPv4 link local (bound): [AF_INET]192.168.1.5:1194
+Sep 03 15:09:50 ubuntu-server openvpn[68439]: UDPv4 link remote: [AF_UNSPEC]
+Sep 03 15:09:50 ubuntu-server openvpn[68439]: GID set to nogroup
+Sep 03 15:09:50 ubuntu-server openvpn[68439]: UID set to nobody
+Sep 03 15:09:50 ubuntu-server openvpn[68439]: MULTI: multi_init called, r=256 v=256
+Sep 03 15:09:50 ubuntu-server openvpn[68439]: IFCONFIG POOL IPv4: base=10.8.0.2 size=253
+Sep 03 15:09:50 ubuntu-server openvpn[68439]: IFCONFIG POOL LIST
+Sep 03 15:09:50 ubuntu-server openvpn[68439]: Initialization Sequence Completed</code></pre><p id="d5ce4682-bb0a-4512-9c01-d5fbfeef5553" class="">Or you can spot it from the interfaces in your system:</p><pre id="8b3ba01f-6a99-4b80-a140-c41d7bdf3fed" class="code"><code>touk@ubuntu-server:~$ ip -br addr
+lo               UNKNOWN        127.0.0.1/8 ::1/128
+ens33            UNKNOWN        192.168.1.5/24 fe80::20c:29ff:fee7:1332/64
+ens37            UNKNOWN        172.16.1.100/24 fe80::20c:29ff:fee7:133c/64
+ens38            UNKNOWN        10.1.0.3/24 metric 100 fe80::20c:29ff:fee7:1346/64
+tun0             UNKNOWN        10.8.0.1/24 fe80::1f3:c228:ffc5:4b1b/64</code></pre><p id="6845f8db-9f4f-4a99-9a0f-c9dba224e432" class="">If you want to change anything, you can do that iside the file <code>/etc/openvpn/server/openvpn.conf</code></p><pre id="08175d1e-c140-4e13-bc7a-9633b51d7732" class="code"><code>ocal 192.168.1.5
+port 1194
+proto udp
+dev tun
+ca ca.crt
+cert server.crt
+key server.key
+dh dh.pem
+auth SHA512
+tls-crypt tc.key
+topology subnet
+server 10.8.0.0 255.255.255.0
+push &quot;redirect-gateway def1 bypass-dhcp&quot;
+ifconfig-pool-persist ipp.txt
+push &quot;dhcp-option DNS 8.8.8.8&quot;
+push &quot;dhcp-option DNS 8.8.4.4&quot;
+push &quot;block-outside-dns&quot;
+keepalive 10 120
+cipher AES-256-CBC
+user nobody
+group nogroup
+persist-key
+persist-tun
+verb 3
+crl-verify crl.pem
+explicit-exit-notify</code></pre><p id="57289f03-96ee-44be-bdfa-5e45eb76f9b0" class="">
+</p><h3 id="46b48757-4cd4-422d-a519-09c24a19be51" class=""><mark class="highlight-purple"><strong>CLIENT SIDE</strong></mark></h3><p id="f293b08a-50bf-44bc-bdc6-5a53cdfaada0" class=""><code>sudo apt install openvpn</code></p><p id="c02c2f1d-17cf-4097-849b-7c7af8a16a1e" class="">It was already installed, because this package comes within the distro installation</p><p id="7bc3ef80-a471-4837-9bab-c67cebf45015" class="">I need to get the server’s certificate on my client machine, because i already generated a client profile when i did my installation</p><p id="e8e4d53e-d4de-4fa3-b168-2bf5ef7c3789" class="">It dropped it inisde /root -_-, because i run it with the sudo command which is necessary </p><pre id="6edd7d2f-7bcd-4c67-a23b-147afddc18a6" class="code"><code>touk@ubuntu-server:~$ sudo ls /root
+[sudo] password for touk:
+snap  touk.ovpn</code></pre><p id="adeabfca-24d9-4f96-97c2-9ed9c2f7d387" class="">I am going to copy it from a machine to another or you can use SCP</p><p id="ee2b94bb-0639-4bc4-ae41-0ba47d91770c" class="">And then client OpenVPN expects it to <code>.conf</code> I will rename it:</p><p id="217345f3-ee6e-43aa-b521-87f6767806b4" class=""><code>mv touk.ovpn touk.conf</code></p><p id="5d0a7471-9613-4f0e-a6d8-c55ee429d20c" class="">Let’s copy it to the client config ovpn file</p><pre id="b1b1a45f-92ec-4fb6-b687-4d159d593e9f" class="code"><code>touk@k8snode:~$ ls /etc/openvpn/client/
+touk@k8snode:~$ sudo mv touk.conf /etc/openvpn/client/
+touk@k8snode:~$ ls /etc/openvpn/client/
+touk.conf</code></pre><p id="3f36573d-92ef-4d82-82d5-642fae69e628" class="">Now let’s connect over the VPN!</p><p id="88ebef1e-85d0-4f67-b309-cb334d54cb01" class=""><code>sudo openvpn  client  config /etc/openvpn/client/touk.conf</code></p><p id="307b093f-45cf-48e4-8160-f534c0a5bba8" class="">And it will runt !</p><p id="8bccbb7d-8f11-4fda-9797-8fa6f95283b2" class="">You can view that it created a virtual tunnel :</p><pre id="98137458-853f-449c-b7bf-168e71c941bb" class="code"><code>touk@k8snode:~$ ip -br addr | grep tu
+tun0             UNKNOWN        10.8.0.2/24 fe80::3057:e82d:7a60:cb14/64</code></pre><p id="fa1068e3-30a3-42de-ad1a-eecf16a4f25a" class="">10.8.0.0/24 Is the default range for the OpenVPN</p><p id="fbf229b2-1010-4864-81c7-f3b70fa070c5" class="">Logging is turned off, you turn that on the client config file and then you can view it inside <code>/var/log/openvpn</code></p><p id="9ceddd09-fb28-4b90-8ce1-644b36e1e41d" class="">Or since it is turned off, i can use the great <code>journalctl</code></p><p id="e128f0da-2de0-4451-8032-24c33b63802d" class=""><code>sudo journalctl -xeu openvpn@client</code></p><p id="65583e89-9a3b-4b7c-848a-34a79416679c" class="">-xe: extended info if some lines are out of terminal size</p><p id="66c91178-8cc1-49cc-802f-895a00f531f0" class="">-u: specify which service</p><p id="d748559c-062c-484c-ba8f-3bb8248f4020" class="">
+</p><p id="187fafb0-631b-4b19-9593-eea389c7b468" class=""><strong>ALWAYS ON OpenVPN:</strong>
+<code>sudo cp /etc/openvpn/client/touk.conf /etc/openvpn/client.conf
+sudo systemctl start openvpn@client</code></p><p id="0d2aff77-6f6b-49be-89df-755bfa8ddf9c" class="">
+</p><p id="a55204e8-ce0a-4fde-9355-608c2a909e50" class=""><em><strong>VPN Server IP Address</strong></em></p><pre id="f9f149b2-5104-4856-ab8f-27af466a3bba" class="code"><code>touk@ubuntu-server:~$ ip -br addr | grep tu
+tun0             UNKNOWN        10.8.0.1/24 fe80::1f3:c228:ffc5:4b1b/64</code></pre><pre id="33bc0193-e960-4f61-89b8-a06db324a4c3" class="code"><code>touk@k8snode:/var/log/openvpn$ ip -br addr | grep tu
+tun0             UNKNOWN        10.8.0.2/24 fe80::3057:e82d:7a60:cb14/64
+touk@k8snode:/var/log/openvpn$ ping 10.8.0.1
+PING 10.8.0.1 (10.8.0.1) 56(84) bytes of data.
+64 bytes from 10.8.0.1: icmp_seq=1 ttl=64 time=2.05 ms
+64 bytes from 10.8.0.1: icmp_seq=2 ttl=64 time=5.35 ms
+^C
+--- 10.8.0.1 ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1002ms
+rtt min/avg/max/mdev = 2.049/3.701/5.354/1.652 ms</code></pre><p id="bcb6a2f2-4076-4688-8620-151193992386" class="">VOILAA! Everything is working.</p></div></article></body></html>

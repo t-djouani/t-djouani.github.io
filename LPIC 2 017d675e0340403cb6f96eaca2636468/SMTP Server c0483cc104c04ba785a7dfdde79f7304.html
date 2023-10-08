@@ -1,0 +1,867 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>SMTP Server</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-interactiveBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="c0483cc1-04c0-4ba7-85a7-dfdde79f7304" class="page sans"><header><h1 class="page-title">SMTP Server</h1><p class="page-description"></p></header><div class="page-body"><p id="592ea738-25da-4bc7-b239-a5ef7d0adb7e" class="">
+</p><p id="12ee74cb-d8b7-4ce8-b36a-6e1c8469e5b0" class=""><em>Postfix is what&#x27;s called an MTA or a message transfer agent. That&#x27;s a server or a daemon that runs a process that supports these simple mail transport protocol, or SMTP communications. So when it comes to email, a lot of us use web-based mail now, so we don&#x27;t see these protocols at all. That&#x27;s why people don&#x27;t even think about these things running. But if you configure an email client, you&#x27;re normally receiving email by using things like POP3 or IMAP4. But when you send email, email is sent using SMTP. And MTAs or message transfer agents, they receive the email you&#x27;re sending and then guide it to its destination. So if it needs to go to Gmail or me.com or AOL or whoever it is that you&#x27;re emailing, it finds the servers and gets it delivered to the right place. So SMTP servers aren&#x27;t really designed to interact with end users. They&#x27;re designed to interact with other SMTP servers.</em></p><p id="ef4f882e-7d85-40fa-8cfd-5cac323d0c03" class="">
+</p><p id="c0518496-5e97-4442-8d20-f276f222d582" class=""><strong><mark class="highlight-purple">Building an SMTP server with Postfix</mark></strong></p><p id="e0d5cfbf-eb0b-4efd-8bb2-1c0d5e54ef86" class="">Installing the binaries and starting the configuration:
+<code>sudo DEBIAN_PRIORITY=low apt install postfix</code></p><p id="1f93afca-6acb-448c-8be7-8ef68f40ec1e" class="">If you want to configure an email server on the internet you don’t want to use the default configuration that comes with <code>sudo apt install postfix</code> which will result to the server being an open relay</p><p id="08c2890f-e342-43e6-a059-45832ab82d44" class="">
+</p><p id="bdb1c44e-6677-4fd4-b494-7962c1d5a8ff" class=""><em>An open SMTP relay is a server that allows anyone on the internet to send email through it. This is not a desirable configuration because it can be exploited by spammers to send massive amounts of unsolicited email. If your server is an open relay, it can be added to blacklists and your legitimate email may not be delivered. It&#x27;s important to properly configure your SMTP server to prevent it from becoming an open relay.</em></p><p id="31ef0752-7df9-4350-981e-51834ae3e06c" class="">
+</p><p id="b7d18492-1603-4868-bae5-273546f004f7" class=""><em><strong>Reconfigure the installation:</strong></em></p><p id="994d187c-59f1-40dc-8962-2e73319a23f5" class=""><code>sudo dpkg-reconfigure postfix</code></p><p id="51fa1bb1-aa33-4783-8539-8a9023572a3e" class=""><em><strong>Postfix Configuration</strong></em><div class="indented"><ul id="30036341-fe0d-405f-9d43-f25324a1c3f7" class="bulleted-list"><li style="list-style-type:disc">using it’s config file:<p id="60e3a2dc-d2eb-49d3-b7b5-cd3d9ca5c6b6" class=""><code>sudo vim /etc/postfix/mainc.cf</code></p></li></ul><ul id="3bdc4df4-cec8-4dd1-b78a-72ac0d465e6b" class="bulleted-list"><li style="list-style-type:disc">Or using a command utility:<p id="6cbfe4a3-18b8-493c-a1be-621c8e33cbba" class=""><code>postconf</code><div class="indented"><ul id="4c53d9f7-05a2-428d-b79b-b1d93c711a2f" class="bulleted-list"><li style="list-style-type:disc">If you want to see only overwritten things :<p id="fe6abaf6-0ae4-4f9f-8312-4c1e0fb470f2" class=""><code>postconf -n</code></p></li></ul></div></p></li></ul></div></p><p id="1fd1ec34-ca17-4340-9ec2-c78e3239b7f1" class="">
+</p><p id="92918e3e-38a5-4301-a358-2ecf9c60ab5b" class=""><strong><mark class="highlight-default">Next thing is Mapping users to email addresses</mark></strong></p><p id="368a4e1b-f696-4cbc-8599-b39ef229cef4" class="">We need to define a mapping file, by default w don’t have it inside <code>/etc/postfix</code>, I will create it</p><p id="241d5808-4b0d-404a-b8a6-222eed58eabe" class=""><code>sudo postconf -e &#x27;virtual_alias_maps= hash:/etc/postfix/maps’</code></p><p id="f4c8c096-00ce-4ba4-a4b7-02411c968820" class="">Now it’s gonna now that  have a mapping file and i can go and create it </p><p id="9dcb757c-5d38-42ff-b583-e3e952a56363" class=""><code>sudo vim /etc/postfix/maps</code></p><pre id="29b32004-0c18-4c45-9c09-d13fca495536" class="code"><code>taqiyeddine@homelab.lan touk</code></pre><p id="a808a113-352d-4636-bf94-a996ab596154" class="">I need to tell postfix about it :</p><p id="214e5073-e807-4f0b-bfd4-2948f576cb53" class=""><code>sudo postmap /etc/postfix/maps</code></p><p id="ea2c54e5-44aa-4d62-b422-afadeeca5b20" class="">And it is a good idea to restart the service: </p><p id="d87084e9-7f76-494c-8965-1b979d55f35b" class=""><code>sudo systemctl restart postfix</code></p><p id="51e88aac-594b-45a0-9911-626190b4e5ee" class="">Now, I have a functional SMTP server and it can accepts emails</p><p id="abc83f5e-fb56-4c28-8262-e4aaed856965" class="">Allow it through the firewall?</p><p id="8d6ee112-5160-49db-b8a0-4b3735d2a4a5" class=""><code>sudo ufw allow 25/tcp</code> or  <code>sudo ufw allow postfix</code> and it will add more needed ports like secure smtp …</p><p id="15423c6c-0f86-46d1-9f3a-db01dfb5f7a6" class="">
+</p><p id="e4ca1c6d-b4c9-4005-81eb-8fa23f57331b" class="">
+</p><p id="3d23fd4c-f489-4908-8ba6-637707b4c7fd" class="">SOME CHANGES I HAD TO DO:</p><p id="7e6975b0-6c7a-4c73-b832-cfd5d5bbe8c7" class="">I added an MX record for my mail server:</p><pre id="e96e397d-32e5-4224-9ada-e8ed07baecdc" class="code"><code>touk@k8snode:/etc/bind$ cat homelab.lan.zone
+;
+; BIND data file for homelab.lan zone
+;
+$TTL    604800
+@       IN      SOA     ns1.homelab.lan. admin.homelab.lan. (
+                              5         ; Serial
+                         604800         ; Refresh
+                          86400         ; Retry
+                        2419200         ; Expire
+                         604800 )       ; Negative Cache TTL
+;
+@       IN      NS      ns1.homelab.lan.
+ns1     IN      A       192.168.1.9
+
+; -- Add dns records
+web     IN      A       192.168.1.12
+centos  IN      A       192.168.1.16
+site1   IN      CNAME   web
+site2   IN      CNAME   web
+server  IN      A       192.168.1.5
+@       IN      MX      10 server.homelab.lan.</code></pre><p id="fa021715-bdc4-41c5-bce9-3c77ca41d277" class=""><code>sudo systemctl restart bind9</code></p><p id="65090301-8092-431a-b1cc-1b71a5d0e7e5" class="">
+</p><p id="3a4dce40-895f-47fd-ba29-b9beb537cd07" class="">Changing host-name in /etc/postfix/main.cf</p><pre id="73901b2e-8c4d-49d2-bae5-cdaa3ab59093" class="code"><code>smtpd_relay_restrictions = permit_mynetworks permit_sasl_authenticated defer_unauth_destination
+myhostname = homealb.lan
+alias_maps = hash:/etc/aliases
+alias_database = hash:/etc/aliases
+myorigin = /etc/mailname
+mydestination = $myhostname, homelab.lan, ubuntu-server, localhost.localdomain, localhost
+relayhost =
+mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128 192.168.1.0/24 172.16.1.0/24
+mailbox_size_limit = 0
+recipient_delimiter = +
+inet_interfaces = all
+inet_protocols = all
+home_mailbox = Mail/
+virtual_alias_maps = hash:/etc/postfix/maps</code></pre><p id="d907fb4f-b076-4c9d-bcbd-ac83057d59cb" class=""><code>sudo systemctl restart postfix</code></p><p id="5324139f-cd53-441f-bc7f-dd3442edad86" class="">
+</p><p id="481eb7da-6f4f-4ee7-a0fb-d44491328fbd" class="">One thing else, i have messed with the <mark class="highlight-brown">home_mailbox for postfix</mark>, so you shouldn’t do that</p><p id="0af00e03-66b9-4766-96f0-ef35ce63f0d1" class="">just comment it and restart the service and everything will 100% work</p><p id="fac3e729-f8a5-48d7-8c5e-8321bfb5edd8" class=""><code>sudo vim /etc/postfix/main.cf</code></p><p id="2cfaef51-0d55-4497-8965-56adea41cafb" class=""><code>#home_mailvbox= Mail/</code></p><p id="dfb0d84f-7b86-4d48-8d14-8512ba8b27da" class=""><code>sudo systemctl restart postfix</code></p><p id="980a7b4c-c709-421f-9c3e-e44e4669bca6" class="">I will add another user and check if he can receive mails</p><p id="77207325-967d-40e7-908e-09ebbfa479e3" class="">As you can see in my <code>sudo cat /etc/postfix/maps</code></p><pre id="ad2a1446-ab68-4507-bbba-b7509ad1aa1d" class="code"><code>testuser@ubuntu-server:/etc/postfix$ cat /etc/postfix/maps
+taqiyeddine@homelab.lan touk
+testuser@homelab.lan testuser</code></pre><pre id="eefda110-de16-40f7-8c5c-c05bc930776d" class="code"><code>touk@ubuntu-server:/etc/postfix$ sudo useradd -m -s /bin/bash testuser
+touk@ubuntu-server:/etc/postfix$ sudo passwd testuser
+New password:
+Retype new password:
+passwd: password updated successfully</code></pre><p id="9b4e3ce2-5014-45aa-ab50-9a8eb44faa10" class=""><code>echo “Hello test user” | mail -s &#x27;to testuser&#x27; testuser@homelab.lan</code></p><p id="675ec95a-e4f8-4915-8c5d-c542a483a56c" class="">and now :</p><pre id="358264db-f8bb-4654-a19e-4e5a9d0cd7dc" class="code"><code>touk@ubuntu-server:/etc/postfix$ su testuser
+Password:
+testuser@ubuntu-server:/etc/postfix$ mail
+&quot;/var/mail/testuser&quot;: 2 messages 2 new
+&gt;N   1 touk               Sat Sep  2 11:28  14/434   to testuser</code></pre><p id="7e76ef96-f189-4f9d-ad81-be27d8acc14c" class=""><strong>TEST IT via the intrnet:</strong></p><pre id="4535a143-e1c5-471f-be49-0a9e82c5ea0d" class="code"><code>touk@ubuntu-server:/etc/postfix$ mail -s &quot;this is from postfix&quot; recipo2194@xgh6.com
+Cc:
+ANOTHER TEEEEST; POSTFIX IS WORKINGGGG</code></pre><figure id="6d4de9b9-fb88-4220-8dc2-b508400f81f3" class="image"><a href="SMTP%20Server%20c0483cc104c04ba785a7dfdde79f7304/Untitled.png"><img style="width:744px" src="SMTP%20Server%20c0483cc104c04ba785a7dfdde79f7304/Untitled.png"/></a></figure><p id="87ec5d99-cb94-4902-9fbe-07e61f9f726b" class="">
+</p><p id="a4e20d78-681c-467f-91e9-848553b80421" class=""><strong><mark class="highlight-purple">Securing Postfix with TLS</mark></strong></p><p id="23f8a6e0-30fc-4732-a198-114d90911bc9" class="">We will use Let’s Encrypt for that!</p><p id="06f670ce-5e99-4242-ae27-5143f5ae1e3d" class="">Let&#x27;s Encrypt will let you generate a certificate that is publicly trusted, free of charge</p><p id="093f0937-053c-49fd-8471-bf3b673c7a68" class=""><code>sudo apt install certbot</code></p><p id="9f509f29-a064-4b09-bb7d-b16b6430696f" class="">What Certbot is is a little automated utility that will help us generate a trusted certificate. Well, it can spin up a temporary web server on port 80, and Let&#x27;s Encrypt can use that temporary web server to validate that I am who I say I am, that I control that domain.</p><p id="ba4cdada-25f0-4b31-b5aa-4b07caa3de27" class=""><code>sudo certbot certonly --standalone --rsa-key-size 4096 --agree-tos --preferred-challenges http -d server.homelab.lan</code> </p><p id="ddc5b1de-7eec-4408-8e9d-61d1a3aece4c" class="">
+</p><p id="fb0b7c5d-5d46-4a38-8a87-5e2f09574bdd" class="">Make sure to point the record for your smtp server like i am doing in my bind9 server:</p><pre id="585baad2-1ae8-4009-a484-cb7531934ec9" class="code"><code>touk@k8snode:/etc/bind$ sudo dig server.homelab.lan
+
+; &lt;&lt;&gt;&gt; DiG 9.16.1-Ubuntu &lt;&lt;&gt;&gt; server.homelab.lan
+;; global options: +cmd
+;; Got answer:
+;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 4260
+;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 4096
+; COOKIE: 1d332c4ffc55f0d90100000064f30800fad0cd29d4c4147f (good)
+;; QUESTION SECTION:
+;server.homelab.lan.            IN      A
+
+;; ANSWER SECTION:
+server.homelab.lan.     604800  IN      A       192.168.1.5
+
+;; Query time: 0 msec
+;; SERVER: 192.168.1.9#53(192.168.1.9)
+;; WHEN: Sat Sep 02 03:01:36 PDT 2023
+;; MSG SIZE  rcvd: 91</code></pre><p id="4cf1d2d9-9e57-4c04-b84e-b5eff5941c76" class="">Once that done it will create a trusted cert for you</p><p id="d2ce5e9d-9e33-4005-a9b6-08419080bc4b" class="">For me i dont have these certs, because my domain is not registered</p><p id="c6f6f85c-90ed-48c8-aac7-dc2b54506ca2" class="">Or you can do this lol:</p><p id="c0315e50-1923-415a-9eba-d8febd76b03c" class="">register a free domain in No-IP AND then point it to the public ip of your home router and do port forwarding to the smtp server</p><pre id="19f1abf8-b3c9-4585-adfe-21b3cc4253c2" class="code"><code>touk@ubuntu-server:/etc/postfix$ sudo certbot certonly --standalone --rsa-key-size 4096 --agree-tos --preferred-challenges http -d serversmtp.servehttp.com
+Saving debug log to /var/log/letsencrypt/letsencrypt.log
+Requesting a certificate for serversmtp.servehttp.com
+
+Successfully received certificate.
+Certificate is saved at: /etc/letsencrypt/live/serversmtp.servehttp.com/fullchain.pem
+Key is saved at:         /etc/letsencrypt/live/serversmtp.servehttp.com/privkey.pem
+This certificate expires on 2023-12-01.
+These files will be updated when the certificate renews.
+Certbot has set up a scheduled task to automatically renew this certificate in the background.
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+If you like Certbot, please consider supporting our work by:
+ * Donating to ISRG / Let&#x27;s Encrypt:   https://letsencrypt.org/donate
+ * Donating to EFF:                    https://eff.org/donate-le
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -</code></pre><p id="88863240-ddd0-412b-ba3b-0299cf367f74" class=""><em>View the current values</em>
+<code>postconf | grep &#x27;smtpd_tls_cert\|smtpd_tls_key&#x27;</code></p><p id="0b3b0630-4e94-4886-8959-16ac1550f923" class=""><em>Update the values</em>
+<code>sudo postconf -e&#x27;smtpd_tls_cert_file=/etc/letsencrypt/live/lab.itpro.tv/fullchain.pem&#x27;
+sudo postconf -e&#x27;smtpd_tls_key_file=/etc/letsencrypt/live/lab.itpro.tv/privkey.pem&#x27;</code></p><p id="76c24e41-c98c-4dfe-88d1-fcf47ec3dddf" class="">Now encryption is like a boolean between the server and the client </p><pre id="abf34a05-0566-4604-b5fe-63e6913fb561" class="code"><code>touk@ubuntu-server:/etc/postfix$ postconf smtpd_tls_security_level
+smtpd_tls_security_level = may</code></pre><p id="da5bb8f4-3c36-4698-80bf-7c7447153bda" class="">You can force it, but it violates the standards, mails might be dropped (If it is an smtp serve on the internet not in private net)</p><p id="f68d1bbf-f467-47d2-8b95-8dd7df53c59f" class=""><code>sudo postconf -e &#x27;smtpd_tls_security_level=encrypt’</code></p><p id="aa0c12e8-4c2a-421b-bcda-07a3afc46185" class="">
+</p><p id="35b822e4-774c-462d-8f46-8eeaa9abaa2b" class="">
+</p><h3 id="bda92dc2-7e37-46dc-8440-9e9669c33271" class=""><mark class="highlight-purple"><em><strong>IMAP &amp; POP3</strong></em></mark></h3><h3 id="7e561919-2f0e-4f84-8450-ba75a5881760" class=""><mark class="highlight-purple"><em><strong>REMOTE EMAIL DELIVERY </strong></em></mark></h3><p id="66290eba-56f6-42c6-8e7a-eeec2ed64456" class="">We all love the terminal, i am assuming lol</p><p id="aaa9ab35-50d8-44c0-a8c2-a62e1e4f9bab" class="">but i do not like working on the terminal when it comes to recieve and sending emails, i don’t want to ssh very time i want to check my mail to get in the server </p><p id="1c634a5b-9ebd-49b7-a808-e7cbb499e257" class="">i am going to have my laptop or my phone or something like that retrieve mail from the server</p><p id="acb884d5-e7c1-433a-81e0-6552bbe02a5d" class="">In order for that to work we need to install Remote email delivery </p><p id="d9336f65-f631-4fda-b699-36014cf03a53" class="">
+</p><p id="48438f6a-630c-4342-ab4f-5c5bf69142fc" class=""><code>sudo apt install dovecot-pop3d dovecot-imapd</code></p><p id="e8d0185e-a6e2-4a85-a6d3-952614a6ee9c" class="">
+</p><p id="81533612-6937-43a3-b1dd-09fd67344f21" class=""><mark class="highlight-yellow"><strong>Configuring Dovecot for User Access</strong></mark></p><p id="8ba091d1-140b-40f5-8ff7-48ae20f62708" class=""><code>sudo vim /etc/dovecot/10-auth.conf</code></p><pre id="c82d75f5-368a-4575-9cca-6976e4ad8a75" class="code"><code>auth_mechanisms = plain login
+disable_plaintext_auth = no</code></pre><p id="1c66b4ee-a0d0-4047-8d09-6e151cfcfdaf" class="">adding ‘login’ will give as basic linux login</p><p id="ae6b2e2c-f588-4cee-83da-dfb84eba799c" class="">disabling plain text is referred to looking at password in plain text or hashed, but we will use TLS instead</p><p id="1a5792a9-d098-43dd-b768-8f24dcc293fb" class=""><mark class="highlight-yellow"><strong>Setting email users location</strong></mark></p><pre id="aeb840a0-69b2-478f-b65a-27282558a3a4" class="code"><code>#mail_location = mbox:~/mail:INBOX=/var/mail/%u
+
+mail_location = maildir:~/Maildir</code></pre><p id="791d221c-5602-484e-8ead-b154468a4b4d" class="">i have commented the first line and added the default directory </p><p id="e8928739-dac2-414a-80bf-f113afcb6f2f" class="">This will use the <code><strong>Maildir</strong></code> format and store the emails in the <code><strong>Maildir</strong></code> directory in the user&#x27;s home directory.</p><p id="f7377f4d-b997-40c6-aae6-32ae4d7c5a73" class="">
+</p><p id="7d8e131d-7b4d-4375-a314-1eab07b60ce0" class=""><mark class="highlight-yellow"><strong>Configure Unix Listener</strong></mark></p><p id="ebaff8d6-9ea1-4991-8744-7d67f80b8291" class="">And then one last thing I need to do is to configure a Unix listener. When somebody logs in, they&#x27;re logging in with their Linux user account. Dovecot expects them to log in with a virtual user account. So that&#x27;s already set up, but I I&#x27;d be good to go if I went with virtual users. But I&#x27;m using real users, so I need to add a couple of extra permissions to make that happen. So I need to go into the 10-master file, which is the master configuration for Dovecot as a whole</p><p id="d62171f0-fb84-44d3-b136-08aa91dc4ba6" class="">
+</p><p id="8a75e3e9-9166-41ca-a386-d78905de189d" class=""><code>sudo vim 10-master.conf</code></p><p id="9570317a-277e-4e5f-bda8-799a794a3e2c" class="">I&#x27;m just going to uncomment that line right there. That&#x27;s the one that&#x27;s allowing us to handle that authentication and tie the users together. Now the default configuration is fine, but if you&#x27;re running Postfix under a dedicated user account, which Ubuntu does by default, then you may need to add two extra lines here. I&#x27;m going to say user equals postfix and group equals postfix. And that&#x27;s letting Dovecot know that the Postfix server is running under its own user account. And so now it knows which user and which group to use when it&#x27;s dealing with file permissions.</p><pre id="9231cab0-08d7-4ad4-a58c-a54c13fef5ca" class="code"><code>service auth {
+  # auth_socket_path points to this userdb socket by default. It&#x27;s typically
+  # used by dovecot-lda, doveadm, possibly imap process, etc. Users that have
+  # full permissions to this socket are able to get a list of all usernames and
+  # get the results of everyone&#x27;s userdb lookups.
+  #
+  # The default 0666 mode allows anyone to connect to the socket, but the
+  # userdb lookups will succeed only if the userdb returns an &quot;uid&quot; field that
+  # matches the caller process&#x27;s UID. Also if caller&#x27;s uid or gid matches the
+  # socket&#x27;s uid or gid the lookup succeeds. Anything else causes a failure.
+  #
+  # To give the caller full permissions to lookup all users, set the mode to
+  # something else than 0666 and Dovecot lets the kernel enforce the
+  # permissions (e.g. 0777 allows everyone full permissions).
+  unix_listener auth-userdb {
+    #mode = 0666
+    #user =
+    #group =
+  }
+
+  # Postfix smtp-auth
+  unix_listener /var/spool/postfix/private/auth {
+    mode = 0666
+    user = postfix
+    group = postfix
+  }
+
+  # Auth process is run as this user.
+  #user = $default_internal_user
+}</code></pre><p id="9ab0e70f-1aca-4fe8-adea-723b5058b36d" class="">
+</p><p id="3a39eeb0-f903-41a9-9e25-929e05cfdef8" class=""><mark class="highlight-yellow">For TLS as i menionned you can configure the 10-ssl.conf and add the path for your certificate and key in ssl_crt path and ssl_jey path inside this file</mark></p><p id="35301466-be7d-43c6-b05d-a378242cf23c" class=""><strong>Firewall access</strong><div class="indented"><pre id="d872c1e9-b44a-4c72-9790-59d12ee9caad" class="code"><code>sudo ufw allow &quot;Dovecot POP3&quot;
+sudo ufw allow &quot;Dovecot IMAP&quot;
+sudo ufw allow &quot;Dovecot Secure IMAP&quot;
+sudo ufw allow &quot;Dovecot Secure POP3&quot;</code></pre><p id="d9f697b9-9984-4600-9ca6-dcbfa919edd5" class=""><code>sudo systemctl restart dovecot</code></p><p id="f3eb3ca9-3a83-492e-b372-a2684af82af6" class="">This was done because i faced an issue of directories conflict between postfix using mailbox and dovecot using Maildir</p><p id="557e2cf7-bbcf-47b4-af86-98acadb29171" class=""><code>touk@ubuntu-server:/etc/dovecot/conf.d$ sudo apt install mb2md</code>
+</p><pre id="6c5745e0-56c8-4d09-9a07-558cab775f92" class="code"><code>Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+mb2md is already the newest version (3.20-9).
+0 upgraded, 0 newly installed, 0 to remove and 11 not upgraded.</code></pre><p id="b8029993-d6ca-4bd4-873b-70c7edba24ed" class="">
+</p><p id="54c076dd-a477-4517-8dad-f00823cd51d2" class=""><code> mb2md -s /var/mail/touk -d ~/Maildir</code>
+</p><pre id="96b73d65-ae3e-409e-a169-10b43f6fc83d" class="code"><code>Converting /var/mail/touk to maildir: /home/touk/Maildir
+Source Mbox is /var/mail/touk
+Target Maildir is /home/touk/Maildir
+6 messages.</code></pre><p id="0b9ddb19-1bb2-4a85-aeed-07c394b2b3a3" class="">
+</p><p id="4b5594e3-2651-4c61-bb88-f31ebfca661b" class="">
+</p><p id="a31ba9b7-2395-48b3-9293-46e9c88d78b5" class="">There is  a mismatch between the old directory used by postfix which use /var/mail/touk and pop3 ~/Maildir so i need to tell postfix to use Maildir in /etc/postfix/main.cf</p><pre id="5ca180a4-d429-4084-b2f0-0a1969790616" class="code"><code>home_mailbox = Maildir/</code></pre><p id="6508dadb-14ad-4c1d-8d15-b642057663a2" class=""><code>sudo systemctl restart postfix</code></p><pre id="5f5f7232-3a27-4c83-95cf-2e3a8467b6e1" class="code"><code>touk@ubuntu-server:~$ echo &quot;this is a test&quot; | mail -s &quot;testing mail directory if its working&quot; touk@ubuntu-server
+touk@ubuntu-server:~$ telnet 127.0.0.1 110
+Trying 127.0.0.1...
+Connected to 127.0.0.1.
+Escape character is &#x27;^]&#x27;.
++OK Dovecot (Ubuntu) ready.
+user touk
++OK
+pass touk
++OK Logged in.
+list
++OK 8 messages:
+1 541
+2 449
+3 2238
+4 477
+5 466
+6 451
+7 466
+8 469</code></pre><h3 id="ea9270b8-f95b-4f92-be45-c4b4ed53641f" class=""><mark class="highlight-purple"><strong>Testing Dovecot Locally</strong></mark></h3><pre id="2e3844c6-6786-4b96-87e6-e5204128946e" class="code"><code>touk@ubuntu-server:/etc/dovecot/conf.d$ telnet 127.0.0.1 110
+Trying 127.0.0.1...
+Connected to 127.0.0.1.
+Escape character is &#x27;^]&#x27;.
++OK Dovecot (Ubuntu) ready.
+user touk
++OK
+pass touk
++OK Logged in.
+list
++OK 13 messages:
+1 541
+2 449
+3 2238
+4 477
+5 466
+6 451
+7 466</code></pre><h3 id="bedc253d-9762-4dde-9d74-aaa7ffe47131" class=""><mark class="highlight-purple"><strong>Using ThunderBird</strong></mark></h3><p id="caa86e72-d41d-4d50-97c9-7bef2e7ac7a0" class="">
+</p><figure id="79bb5bcf-8505-45a9-9fc8-62f280c3f7d0" class="image"><a href="SMTP%20Server%20c0483cc104c04ba785a7dfdde79f7304/Untitled%201.png"><img style="width:892px" src="SMTP%20Server%20c0483cc104c04ba785a7dfdde79f7304/Untitled%201.png"/></a></figure><p id="84025df3-ed36-4224-a74b-28d50ee4c17b" class="">
+</p><figure id="c6796858-6dbb-4925-ac03-4d348dda499f" class="image"><a href="SMTP%20Server%20c0483cc104c04ba785a7dfdde79f7304/Untitled%202.png"><img style="width:791px" src="SMTP%20Server%20c0483cc104c04ba785a7dfdde79f7304/Untitled%202.png"/></a></figure><p id="ddadc94c-b5e7-4dea-ae66-e09a7d63bd6b" class="">
+</p><figure id="af8c69fd-53db-4e06-a0be-54518731e3fb" class="image"><a href="SMTP%20Server%20c0483cc104c04ba785a7dfdde79f7304/Untitled%203.png"><img style="width:757px" src="SMTP%20Server%20c0483cc104c04ba785a7dfdde79f7304/Untitled%203.png"/></a></figure><p id="6168ee4d-6471-4e06-9f71-7d4bc83c0beb" class=""><code>mail -s “Hi taqiyeddine” taqiyeddine@homelab.lan</code></p><figure id="4d6b1637-edb8-4d4d-adf5-817a687c715a" class="image"><a href="SMTP%20Server%20c0483cc104c04ba785a7dfdde79f7304/Untitled%204.png"><img style="width:1046px" src="SMTP%20Server%20c0483cc104c04ba785a7dfdde79f7304/Untitled%204.png"/></a></figure><p id="ab662ba7-d72c-4628-b462-9e149ca9c9e8" class="">
+</p></div></p></div></article></body></html>
